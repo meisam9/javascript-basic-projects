@@ -71,4 +71,74 @@ const menu = [
     img: "./images/item-9.jpeg",
     desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
   },
+  {
+    id:10,
+    title: "Stake dinner",
+    category: "dinner",
+    price: 35.99,
+    img: "./images/item-10.jpeg",
+    desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
+  },
 ];
+const section=document.querySelector('.section-center')
+const btnContainer=document.querySelector('.btn-container')
+
+// load items
+window.addEventListener('DOMContentLoaded',()=>{
+  displayMenuFunc(menu)
+  displayBtns()  
+  })
+
+
+  function displayMenuFunc(menuItem){
+    let displayMenu=menuItem.map(item=>{
+      return `
+      <article class="menu-item">
+            <img src=${item.img} class="photo" alt=${item.title}>
+            <div class="item-info">
+              <header>
+                <h4>${item.title}</h4>
+                <h4 class="price">${item.price}</h4>
+              </header>
+              <p class="item-text">
+                ${item.desc}              
+              </p>
+            </div>
+          </article>`
+    })
+    section.innerHTML=displayMenu.join('')
+  }
+
+  function displayBtns(){
+    const getCategory=menu.reduce((value,item)=>{
+      if(! value.includes(item.category)){
+        value.push(item.category)
+      }
+      return value
+    },["all"])
+    const categoryBtn=getCategory.map(item=>{
+      return `<button class="filter-btn" 
+      type="button" data-id="${item}">${item}</button>
+      `
+    }).join('')
+    btnContainer.innerHTML=categoryBtn
+    const btns=btnContainer.querySelectorAll('.filter-btn')
+  
+  //filter items
+  
+  btns.forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      const category=e.currentTarget.dataset.id
+      const filterMenu=menu.filter(item=>{
+        if(item.category===category){
+          return item
+        }
+      })
+      if(category==="all"){
+        displayMenuFunc(menu)
+      }else{
+        displayMenuFunc(filterMenu)
+      }
+    })
+  })
+  }
